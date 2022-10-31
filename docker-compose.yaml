@@ -1,0 +1,25 @@
+version: "3.8"
+services:
+  ws:
+    container_name: server
+    restart: on-failure
+    build:
+      context: .
+      dockerfile: nodeserver/Dockerfile
+    volumes:
+      - ./nodeserver:/app/
+    ports:
+      - "9000:9000"
+    command: >
+      sh -c "node ."
+  react-app:
+    container_name: frontend
+    restart: on-failure
+    build: .
+    volumes:
+      - ./views:/views
+      - ./static:/static
+    ports:
+      - "8000:8000"
+    depends_on:
+      - ws
